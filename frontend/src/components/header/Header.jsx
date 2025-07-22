@@ -17,7 +17,7 @@ import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-
+import ConnectWithUsForm from '../../pages/SignIn/ConnectWithUsForm';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 
 import Nav from './nav/Nav';
@@ -109,9 +109,14 @@ const Header = (props) => {
                     <div className='container-fluid'>
                         <div className='row'>
                             <div className='col-sm-2 part1 d-flex align-items-center'>
-                                <Link to="/">
-                                    {/* <img src={Logo} className='logo' /> */}Logo
-                                    </Link>
+                                {/* <Link to="/">
+                                    <img src={Logo} className='logo' />Logo
+                                    </Link> */}
+                                        <Link to="/" className="flex items-center space-x-2">
+      <h1 className="text-5xl font-extrabold bg-gradient-to-r from-green-800 via-green-600 to-lime-400 text-transparent bg-clip-text tracking-wider drop-shadow-md">
+        FarmsEasy
+      </h1>
+    </Link>
                                 {
                                     windowWidth < 992 &&
                                     <div className='ml-auto d-flex align-items-center'>
@@ -190,7 +195,11 @@ const Header = (props) => {
                                                             <Button className="btn btn-g">Sign In</Button>
                                                         </Link>
                                                     </li>
-
+                                                    <li className='list-inline-item'>
+                                                        <Link to={'/ConnectWithUsForm'}>
+                                                            <Button className="btn btn-g">Connect with us</Button>
+                                                        </Link>
+                                                    </li>
 
 
 

@@ -31,6 +31,9 @@ router.delete('/:id', verifyToken,productController.deleteProduct);
 
 // Get products with optional category and subcategory filters
 router.get('/', productController.getProducts);
+router.get("/summary", productController.getProductSummary);
+router.get('/:id', productController.getProductById);
+router.get('/products/:id/similar', productController.getSimilarProducts);
 
 // Get single product by id
 // router.get('/:id', productController.getProductById);

@@ -159,6 +159,9 @@ exports.getProducts = async (req, res) => {
 };
 
 
+
+
+
 exports.updateProduct = async (req, res) => {
   try {
     const { id: productId } = req.params;
@@ -242,4 +245,143 @@ exports.updateProduct = async (req, res) => {
 };
 
 
+// GET /api/products/summary
+exports.getProductSummary = async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT 
+        p.id,
+        p.name,
+        p.brand,
+        p.price,
+        p.discount_percentage,
+        p.discounted_price,
+        COALESCE(json_agg(
+          json_build_object(
+            'id', pi.id,
+            'image_url', pi.image_url,
+            'is_primary', pi.is_primary
+          )
+        ) FILTER (WHERE pi.id IS NOT NULL), '[]') AS images
+      FROM products p
+      LEFT JOIN product_images pi ON p.id = pi.product_id
+      WHERE p.is_active = true
+      GROUP BY p.id
+      ORDER BY p.created_at DESC
+    `);
 
+    res.status(200).json({ products: result.rows });
+  } catch (error) {
+    console.error("Error fetching product summary:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+exports.getProductById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(`
+      SELECT 
+        p.id,
+        p.name,
+        p.brand,
+        p.description,
+        p.price,
+        p.discount_percentage,
+        p.discounted_price,
+        p.category_id,
+        p.subcategory_id,
+        p.stock_quantity,
+        p.created_at,
+        COALESCE(json_agg(
+          json_build_object(
+            'id', pi.id,
+            'image_url', pi.image_url,
+            'is_primary', pi.is_primary
+          )
+        ) FILTER (WHERE pi.id IS NOT NULL), '[]') AS images
+      FROM products p
+      LEFT JOIN product_images pi ON p.id = pi.product_id
+      WHERE p.id = $1
+      GROUP BY p.id
+    `, [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.status(200).json({ product: result.rows[0] });
+  } catch (error) {
+    console.error("❌ Error in getProductById:", error); // ✅ print full error
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+// Add this to your backend controllers (e.g., productController.js)
+
+// GET /api/products/:id/similar
+exports.getSimilarProducts = async (req, res) => {
+  const { id } = req.params;
+  const { limit = 4 } = req.query;
+  
+  try {
+    // First get the current product to find its brand/category
+    const currentProduct = await pool.query(`
+      SELECT brand, category_id, subcategory_id 
+      FROM products 
+      WHERE id = $1
+    `, [id]);
+
+    if (currentProduct.rows.length === 0) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const { brand, category_id, subcategory_id } = currentProduct.rows[0];
+
+    // Find similar products by brand and category (excluding current product)
+    const result = await pool.query(`
+      SELECT 
+        p.id,
+        p.name,
+        p.brand,
+        p.price,
+        p.discount_percentage,
+        p.discounted_price,
+        COALESCE(json_agg(
+          json_build_object(
+            'id', pi.id,
+            'image_url', pi.image_url,
+            'is_primary', pi.is_primary
+          )
+        ) FILTER (WHERE pi.id IS NOT NULL), '[]') AS images
+      FROM products p
+      LEFT JOIN product_images pi ON p.id = pi.product_id
+      WHERE p.id != $1 
+        AND (
+          p.brand = $2 
+          OR p.category_id = $3 
+          OR p.subcategory_id = $4
+        )
+      GROUP BY p.id
+      ORDER BY 
+        CASE WHEN p.brand = $2 THEN 1 ELSE 2 END,
+        CASE WHEN p.category_id = $3 THEN 1 ELSE 2 END,
+        p.created_at DESC
+      LIMIT $5
+    `, [id, brand, category_id, subcategory_id, limit]);
+
+    res.status(200).json({ 
+      similar_products: result.rows,
+      total: result.rows.length
+    });
+  } catch (error) {
+    console.error("❌ Error in getSimilarProducts:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Don't forget to add the route to your routes file:
+// router.get('/products/:id/similar', productController.getSimilarProducts);

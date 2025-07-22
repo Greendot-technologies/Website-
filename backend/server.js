@@ -13,7 +13,8 @@ const subCategoryRoutes = require("./routes/subCategoryRoutes");
 const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const sliderRoutes = require('./routes/sliderRoutes');
-
+const cartRoutes = require('./routes/cartRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 // const vendorCitiesRoutes = require('./routes/vendorCitiesRoutes');
 
 const locationRoutes = require('./routes/locationRoutes');
@@ -39,6 +40,8 @@ app.use("/api/user", subCategoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/category', categoryRoutes);
 app.use("/api/sliders", sliderRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
 
 
 // app.use('/api/vendor-cities', vendorCitiesRoutes);

@@ -1,95 +1,3 @@
-// /* eslint-disable no-unused-vars */
-// import React, { createContext, useState } from 'react'
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "./App.css";
-// import "./responsive.css";
-// import { BrowserRouter, Route, Routes } from 'react-router-dom'
-// import Header from './components/header/Header'
-// import Home from './pages/Home/Home'
-// import Footer from './components/footer/Footer'
-
-
-// import data from "./data";
-// import SignIn from './pages/SignIn/SignIn';
-// import SignUp from './pages/SignUp/SignUp';
-// import Cart from './pages/cart/Cart';
-// import Details from './pages/Details/Details';
-
-// const MyContext = createContext();
-
-// const App = () => {
-
-//   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-//   const [cartItems, setCartItems] = useState([]);
-
-//   const [isopenNavigation, setIsopenNavigation] = useState(false);
-//   const [isOpenFilters, setIsopenFilters] = useState(false);
-//   const [isLogin, setIsLogin] = useState();
-
-//   const signIn = () => {
-//     const is_Login = localStorage.getItem("isLogin");
-//     setIsLogin(is_Login);
-//   };
-
-//   const signOut = () => {
-//     localStorage.removeItem("isLogin");
-//     setIsLogin(false);
-//   };
-
-
-//   const openFilters = () => {
-//     setIsopenFilters(!isOpenFilters);
-//   };
-
-
-//   const value = {
-//     windowWidth,
-//     cartItems,
-//     isLogin,
-//     signOut,
-//     signIn,
-//     isOpenFilters,
-//     openFilters,
-//     isopenNavigation,
-//     setIsopenNavigation,
-//   };
-
-//   return <>
-//     <BrowserRouter>
-//       <MyContext.Provider value={value}>
-
-//         <Header data={data.productData} />
-//         <Routes>
-//           <Route
-//             exact={true}
-//             path="/"
-//             element={<Home data={data.productData} />}
-//           />
-//           {/* <Route
-//               exact={true}
-//               path="/product/:id"
-//               element={<DetailsPage data={data.productData} />}
-//             /> */}
-//           <Route exact={true} path="/cart" element={<Cart />} />
-//           <Route exact={true} path="/details" element={<Details />} />
-//           {/* <Route exact={true} path="/checkout" element={<Checkout />} /> */}
-
-
-//           <Route exact={true} path="/signIn" element={<SignIn />} />
-//           <Route exact={true} path="/signUp" element={<SignUp />} />
-//           {/* <Route exact={true} path="*" element={<NotFound />} /> */}
-
-//         </Routes>
-//         <Footer />
-//       </MyContext.Provider>
-
-//     </BrowserRouter>
-//   </>
-// }
-
-// export default App
-// export { MyContext };
-
 
 
 
@@ -107,18 +15,23 @@ import Footer from './components/footer/Footer';
 import ShopByCrop from './components/crop/ShopByCrop';
 import ProductList from './components/product/ProductList';
 import AllProducts from './components/product/AllProducts';
+import DailyBestSells from './components/product/DailyBestSells';   
+import ProductDetail from './components/product/ProductDetail';
 
 // Pages
 import Home from './pages/Home/Home';
 import SignIn from './pages/SignIn/SignIn';
 import SignUp from './pages/SignUp/SignUp';
 import Cart from './pages/cart/Cart';
+import CheckoutPage from './pages/cart/CheckoutPage'; 
 import Details from './pages/Details/Details';
+import ConnectWithUsForm from './pages/SignIn/ConnectWithUsForm'; // Import the ConnectWithUsForm component
 
 // Data
 import data from "./data";
 
 // Context
+
 const MyContext = createContext();
 
 const App = () => {
@@ -176,6 +89,10 @@ const App = () => {
           <Route path="/AllProducts" element={<AllProducts />} />
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/signUp" element={<SignUp />} />
+        <Route path="/DailyBestSells" element={<DailyBestSells />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/ConnectWithUsForm" element={<ConnectWithUsForm open={true} onClose={() => {}} />} />
+          <Route path="/CheckoutPage" element={<CheckoutPage />} />
           {/* Add NotFound or redirect route if needed */}
         </Routes>
 
@@ -187,3 +104,4 @@ const App = () => {
 
 export default App;
 export { MyContext };
+
