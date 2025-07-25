@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const orderController = require('../controllers/orderController');
+const paymentController = require('../controllers/paymentcontroller');
 
-// Place an order
-router.post('/place', orderController.placeOrder);
-
-// Get all orders by user ID
-router.get('/:user_id', orderController.getOrders);
+router.post('/place', paymentController.createPaymentOrder);
+router.post('/verify-payment', paymentController.verifyPayment);
 
 module.exports = router;
+
+
