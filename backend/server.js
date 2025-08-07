@@ -1,4 +1,3 @@
-
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -16,12 +15,14 @@ const orderRoutes = require("./routes/orderRoutes");
 const locationRoutes = require("./routes/locationRoutes");
 const addressRoutes = require("./routes/addressRoutes");
 const paymentRoutes = require("./routes/paymentRoutes"); // Import payment routes
-const authServiceRoutes = require('./routes/authServiceRoutes');
+const authServiceRoutes = require("./routes/authServiceRoutes");
 // Create Express app
 const app = express();
 
 // Middleware
 app.use(cors());
+app.use(cors({ origin: "http://localhost:5173" }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -40,7 +41,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/location", locationRoutes);
 app.use("/api/address", addressRoutes);
 app.use("/api/payment", paymentRoutes); // Added payment routes
-app.use('/api', authServiceRoutes);
+app.use("/api", authServiceRoutes);
 // Root route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to Plant Backend API" });

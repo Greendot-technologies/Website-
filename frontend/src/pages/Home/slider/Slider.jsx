@@ -40,7 +40,7 @@ const HomeSlider = () => {
                                 Don’t miss amazing<br />
                                 deals
                             </h2>
-                            <p>Sign up for the daily newsletter</p>
+                            {/* <p>Sign up for the daily newsletter</p> */}
                         </div>
                     </div>
                     <div className="item">
@@ -50,7 +50,7 @@ const HomeSlider = () => {
                                <br />
                                 Big discount
                             </h2>
-                            <p>Sign up for the daily newsletter</p>
+                            {/* <p>Sign up for the daily newsletter</p> */}
                         </div>
                     </div>
                 </Slider>
